@@ -6,24 +6,14 @@ import com.mygdx.claninvasion.model.level.Level;
 import com.mygdx.claninvasion.model.level.LevelIterator;
 import org.javatuples.Pair;
 
-import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
 
 import static com.mygdx.claninvasion.model.level.Levels.createTowerLevelIterator;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import java.util.Timer;
-import java.util.concurrent.TimeUnit;
-
 public class Tower extends ArtificialEntity implements Defensible {
 
-  /*  protected int creationTime;
-    protected int creationCost;
-    protected int maxHealth;
-    protected int minHealth;
-    protected int reactionTime;
-    protected int healHealthIncrease;
-    protected int healGoalPoint; */
 
     GameTowerLevelIterator towerLevelIterator = null;
     Timer timer = new Timer();
@@ -35,14 +25,7 @@ public class Tower extends ArtificialEntity implements Defensible {
         super(entitySymbol, position);
         towerLevelIterator = createTowerLevelIterator();
         creationTime = towerLevelIterator.current().getCreationTime();
-        try {
-            MILLISECONDS.sleep(creationTime);
-        } catch (InterruptedException e) {
-            System.out.println("This did not work");
-        }
-
-
-
+        runTheTimer();
     }
 
     Tower(LevelIterator<Level> levelIterator) {
@@ -57,6 +40,14 @@ public class Tower extends ArtificialEntity implements Defensible {
     @Override
     public void heal() {
         super.heal();
+    }
+
+    private void runTheTimer() {
+        try {
+            MILLISECONDS.sleep(creationTime);
+        } catch (InterruptedException e) {
+            System.out.println("The timer did not work");
+        }
     }
 
 
