@@ -11,7 +11,11 @@ import java.util.ArrayList;
  * TODO: Logic part is missing
  */
 public class GameTowerLevelIterator extends LevelIterator<GameTowerLevel>{
+
+    private GameTowerLevel gameTowerLevel;
+
     public GameTowerLevelIterator(ArrayList<GameTowerLevel> gameTowerLevels) {
         super(gameTowerLevels);
     }
+
 }

@@ -80,7 +80,6 @@ public class Player implements Winnable {
     private final ExecutorService executorService;
     private Color color;
 
-    Levels currentLevel;
     GameTowerLevelIterator gameTowerLevelIterator;
 
     public Player(GameModel game , Color c) {
@@ -168,7 +167,7 @@ public class Player implements Winnable {
          Tower tower = (Tower) game.getWorldMap().createMapEntity(EntitySymbol.TOWER, cell, null);
          System.out.println(cell.getWorldPosition());
          towers.add(tower);
-        wealth.set(wealth.get() - Tower.COST);
+         wealth.set(wealth.get() - Tower.COST);
          return tower;
     }
 
@@ -361,6 +360,10 @@ public class Player implements Winnable {
     }
 
     public void levelUp() {
-
+        System.out.println("Tower level is:" + gameTowerLevelIterator.getLevelName());
+        System.out.println("Tower creation time is" + gameTowerLevelIterator.current().getCreationTime());
+        if(gameTowerLevelIterator.hasNext()) {
+            gameTowerLevelIterator.next();
+        }
     }
 }

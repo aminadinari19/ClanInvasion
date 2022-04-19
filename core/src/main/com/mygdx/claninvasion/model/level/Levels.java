@@ -8,7 +8,7 @@ import org.javatuples.Septet;
 
 public class Levels {
     private static final Septet<Integer, Integer, Integer, Integer, Integer, Integer, Integer> level0 =
-            new Septet<>(1000, 200, 1000, 0, 1000, 10, 30);
+            new Septet<>(5000, 200, 1000, 0, 1000, 10, 30);
     private static final Septet<Integer, Integer, Integer, Integer, Integer, Integer, Integer> level1 =
             new Septet<>(800, 210, 1090, 0, 1000, 10, 35);
     private static final Septet<Integer, Integer, Integer, Integer, Integer, Integer, Integer> level2 =
