@@ -4,18 +4,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.claninvasion.model.GameModel;
 import com.mygdx.claninvasion.model.entity.*;
+import com.mygdx.claninvasion.model.level.GameSoldierLevelIterator;
+import com.mygdx.claninvasion.model.level.GameTowerLevelIterator;
+import com.mygdx.claninvasion.model.level.Levels;
 import com.mygdx.claninvasion.model.map.WorldCell;
 import com.mygdx.claninvasion.model.map.WorldMap;
 import org.javatuples.Pair;
 
 import java.awt.*;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Stack;
-import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.mygdx.claninvasion.model.level.Levels.createTowerLevelIterator;
 import static java.awt.Color.*;
 
 /**
@@ -30,6 +32,9 @@ import static java.awt.Color.*;
 public class Player implements Winnable {
     public static final int INITIAL_WEALTH = 1000;
     public static final int MAX_GOLDMINE = 3;
+
+    public Levels level;
+
     /**
      * Opponent of the active player
      */
@@ -75,6 +80,9 @@ public class Player implements Winnable {
     private final ExecutorService executorService;
     private Color color;
 
+    Levels currentLevel;
+    GameTowerLevelIterator gameTowerLevelIterator;
+
     public Player(GameModel game , Color c) {
         this.color = c;
         this.id = UUID.randomUUID();
@@ -87,6 +95,8 @@ public class Player implements Winnable {
         coinProduceQueue = new LinkedBlockingDeque<>(MAX_GOLDMINE);
         executorService.execute(this::consumeGold);
         winningState = WinningState.UKNOWN;
+
+        gameTowerLevelIterator = createTowerLevelIterator();
     }
 
     public void changeCastle(Castle castle) {
@@ -348,5 +358,9 @@ public class Player implements Winnable {
             return false;
         }
         return ((Player) obj).id == this.id;
+    }
+
+    public void levelUp() {
+
     }
 }

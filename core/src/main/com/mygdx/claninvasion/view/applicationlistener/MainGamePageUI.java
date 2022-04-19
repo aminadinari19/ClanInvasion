@@ -191,6 +191,7 @@ public final class MainGamePageUI implements ApplicationListener {
                 if (!player.equals(app.getCurrentPlayer())) {
                     return;
                 }
+                System.out.println(selectBox.getSelected().split(" ")[1]);
                 switch (selectBox.getSelected().split(" ")[1]) {
                     case "Tower":
                         if (player.canCreateTower()) {
@@ -209,6 +210,11 @@ public final class MainGamePageUI implements ApplicationListener {
                         }
                         break;
                     case "Level":
+                        System.out.println("You are about to update");
+                        if(player.canUpdateLevel()) {
+                            System.out.println("You have funds to update");
+                            player.levelUp();
+                        }
                         break;
                     case "Dragon":
                         if (player.canCreateBarbarian()) {
