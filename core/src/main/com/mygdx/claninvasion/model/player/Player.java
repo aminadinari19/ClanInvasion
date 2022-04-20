@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.mygdx.claninvasion.model.level.Levels.createTowerLevelIterator;
-import static java.awt.Color.*;
+import static com.mygdx.claninvasion.model.entity.Tower.towerLevelIterator;
+import static com.mygdx.claninvasion.model.entity.Tower.updateTowerLevel;
+
 
 /**
  * This class is responsible for handling
@@ -80,7 +81,6 @@ public class Player implements Winnable {
     private final ExecutorService executorService;
     private Color color;
 
-    GameTowerLevelIterator gameTowerLevelIterator;
 
     public Player(GameModel game , Color c) {
         this.color = c;
@@ -95,7 +95,6 @@ public class Player implements Winnable {
         executorService.execute(this::consumeGold);
         winningState = WinningState.UKNOWN;
 
-        gameTowerLevelIterator = createTowerLevelIterator();
     }
 
     public void changeCastle(Castle castle) {
@@ -359,11 +358,10 @@ public class Player implements Winnable {
         return ((Player) obj).id == this.id;
     }
 
-    public void levelUp() {
-        System.out.println("Tower level is:" + gameTowerLevelIterator.getLevelName());
-        System.out.println("Tower creation time is" + gameTowerLevelIterator.current().getCreationTime());
-        if(gameTowerLevelIterator.hasNext()) {
-            gameTowerLevelIterator.next();
+    public void levelUp()  {
+        if(towerLevelIterator.hasNext()) {
+            System.out.println("It can be updated");
+            updateTowerLevel();
         }
     }
 }

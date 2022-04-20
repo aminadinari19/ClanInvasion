@@ -9,28 +9,55 @@ import org.javatuples.Pair;
 import java.util.concurrent.CompletableFuture;
 
 import static com.mygdx.claninvasion.model.level.Levels.createTowerLevelIterator;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.Executors.newFixedThreadPool;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import java.util.Timer;
+
+import java.util.concurrent.ExecutorService;
+
 public class Tower extends ArtificialEntity implements Defensible {
 
 
-    GameTowerLevelIterator towerLevelIterator = null;
-    Timer timer = new Timer();
+    public static GameTowerLevelIterator towerLevelIterator = createTowerLevelIterator();
+    static GameTowerLevel gameTowerLevel= towerLevelIterator.current();
 
     public static int COST = 200;
     public static int creationTime;
+    boolean levelUpdated;
 
     public Tower(EntitySymbol entitySymbol, Pair<Integer, Integer> position) {
         super(entitySymbol, position);
         towerLevelIterator = createTowerLevelIterator();
-        creationTime = towerLevelIterator.current().getCreationTime();
-        runTheTimer();
+        creationTime = gameTowerLevel.getCreationTime();
+        towerUpdateLevel().thenRunAsync(() -> System.out.println("New tower was added"));
     }
+
 
     Tower(LevelIterator<Level> levelIterator) {
         super(levelIterator);
     }
+
+    public static void updateTowerLevel() {
+        creationTime = towerLevelIterator.current().getCreationTime();
+    }
+
+
+    public CompletableFuture<Boolean> towerUpdateLevel() {
+        ExecutorService executor = newFixedThreadPool(1);
+        CompletableFuture<Boolean> supply = CompletableFuture.<Boolean>supplyAsync(() -> {
+            Boolean valueUpdated = null;
+            try {
+                System.out.println("Sleeping");
+                Thread.sleep(creationTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return valueUpdated;
+        }, executor);
+
+        supply.whenComplete((a, b) -> executor.shutdownNow());
+        return supply;
+    }
+
 
     @Override
     public void damage(int amount) {
@@ -40,14 +67,6 @@ public class Tower extends ArtificialEntity implements Defensible {
     @Override
     public void heal() {
         super.heal();
-    }
-
-    private void runTheTimer() {
-        try {
-            MILLISECONDS.sleep(creationTime);
-        } catch (InterruptedException e) {
-            System.out.println("The timer did not work");
-        }
     }
 
 
